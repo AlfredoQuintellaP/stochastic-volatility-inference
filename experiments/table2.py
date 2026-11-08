@@ -5,9 +5,11 @@ We expect to see the sample moments of daily sp500 returns
 import numpy as np
 import pandas as pd
 from scipy import stats
+import matplotlib.pyplot as plt
 
 # defining the quantil
-alpha = 0.01
+SIGNIF = 0.01
+MAX_LAG = 20
 
 df = pd.read_csv("data/sp500.csv", index_col="date", parse_dates=True)
 y_all = df["ret"]
@@ -33,31 +35,43 @@ def ccf2(y, lag=1):
     y = np.asarray(y)
     return np.corrcoef(y[:-lag], y[lag:] ** 2)[0, 1]
 
-rows = {}
-for name, s in periods.items():
-    y = s.values
-    n = len(y)
-    jb = stats.jarque_bera(y)
-    band = stats.norm.ppf(1-alpha / 2) / np.sqrt(n)
-    # band = 2.576 / np.sqrt(n)
-    r2, r21 = acf(y ** 2), ccf2(y)
-    rows[name] = {
-        "Sample size": n,
-        "Mean": y.mean(),
-        "Median": np.median(y),
-        "Maximum": y.max(),
-        "Minimum": y.min(),
-        "Variance": y.var(ddof=1),
-        "Skewness": stats.skew(y),
-        "Kurtosis": stats.kurtosis(y, fisher=False),
-        "Jarque-Bera": jb.statistic,
-        "rho2(1)": r2,
-        "rho2(1) signif 1%": abs(r2) > band,
-        "rho21(1)": r21,
-        "rho21(1) signif 1%": abs(r21) > band,
-    }
+if __name__ == "__main__":
+    rows = {}
+    stems = {}
 
-out = pd.DataFrame(rows)
-pd.set_option("display.float_format", lambda v: f"{v:.3f}")
-print(out)
-out.to_csv("results/table2_reproduced.csv")
+    for name, s in periods.items():
+        y = s.values
+        n = len(y)
+        jb = stats.jarque_bera(y)
+        band = stats.norm.ppf(1 - SIGNIF / 2) / np.sqrt(n)
+
+        lags = np.arange(1, MAX_LAG + 1)
+        rho2 = np.array([acf(y ** 2, l) for l in lags])
+        rho21 = np.array([ccf2(y, l) for l in lags])
+        stems[name] = pd.DataFrame(
+            {"rho2": rho2, "signif_rho2": np.abs(rho2) > band,
+             "rho21": rho21, "signif_rho21": np.abs(rho21) > band},
+            index=pd.Index(lags, name="lag"),
+        )
+
+        rows[name] = {
+            "Sample size": n,
+            "Mean": y.mean(),
+            "Median": np.median(y),
+            "Maximum": y.max(),
+            "Minimum": y.min(),
+            "Variance": y.var(ddof=1),
+            "Skewness": stats.skew(y),
+            "Kurtosis": stats.kurtosis(y, fisher=False),
+            "Jarque-Bera": jb.statistic,
+            "Jarque-Bera p-value": jb.pvalue,
+            "rho2(1)": rho2[0],
+            "rho2(1) signif": abs(rho2[0]) > band,
+            "rho21(1)": rho21[0],
+            "rho21(1) signif": abs(rho21[0]) > band,
+        }
+
+    out = pd.DataFrame(rows)
+    pd.set_option("display.float_format", lambda v: f"{v:.3f}")
+    print(out)
+    out.to_csv("results/table2_reproduced.csv")
