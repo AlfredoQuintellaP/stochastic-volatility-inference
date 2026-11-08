@@ -1,0 +1,9 @@
+numpy
+scipy
+pandas
+matplotlib
+statsmodels
+yfinance
+jupyter
+numba
+particles
