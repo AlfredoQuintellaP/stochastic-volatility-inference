@@ -5,7 +5,7 @@ We will organize a basic roadmap to have a start (can and will definitly change 
 
 ## (DONE) Basic data obtetion and calculations
 
-The main check here is the table 2 of the article.
+The main check here is the table 2 of the article. We expect equal results to check that we got correct results and used the correct dates.
 
 ### 1. Obtain S&P 500 returns
 
