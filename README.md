@@ -27,9 +27,14 @@ The project is organized in six folders:
 - `experiments/`: one script per table or figure reproduced from the paper, named after what it reproduces.
 - `results/`: outputs of the experiments (tables, figures, saved arrays).
 
+### Data
+
+S&P 500 index (`^GSPC`) adjusted close from Yahoo Finance, from 2 January 1996 to 18 September 2015. Returns are computed as y_t = 100 · Δlog(P_t). The in-sample period ends on 30 December 2005 and the out-of-sample period starts on 3 January 2006. Yahoo occasionally revises historical data, so small differences with respect to the paper are possible.
+
 -------------------------------
 
 We will organize a basic roadmap to have a start (can and will definitly change over time). 
+
 
 ## Roadmap
 
