@@ -5,6 +5,28 @@ Reproduction of Mao, Czellar, Ruiz & Veiga (2016) + comparison with other estima
 
 ## Basic structure
 
+```
+.
+├── README.md
+├── requirements.txt
+├── data/
+│   └── sp500.csv             # daily S&P 500 adjusted close and returns
+├── src/
+│   ├── __init__.py
+│   └── download_data.py      # data acquisition (Yahoo Finance)
+├── experiments/
+│   └── table2.py     # Table 2 and Figure 5 (sample part)
+├── results/
+│   └── table2_reproduced.csv
+```
+
+The project is organized in six folders:
+
+- `data/`: datasets, normally saved as `.csv`.
+- `src/`: reusable code (data acquisition now; the model, filters and estimators later, e.g. `ged.py`, `model.py`, `abc_filter.py`).
+- `experiments/`: one script per table or figure reproduced from the paper, named after what it reproduces.
+- `results/`: outputs of the experiments (tables, figures, saved arrays).
+
 -------------------------------
 
 We will organize a basic roadmap to have a start (can and will definitly change over time). 
