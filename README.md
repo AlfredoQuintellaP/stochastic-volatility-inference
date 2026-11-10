@@ -1,54 +1,55 @@
 # ABC-filter ML for asymmetric SV models (SP500)
 Reproduction of Mao, Czellar, Ruiz & Veiga (2016) + comparison with other estimation methods.
 
+-------------------------------
+
+## Basic structure
+
+-------------------------------
+
 We will organize a basic roadmap to have a start (can and will definitly change over time). 
 
-## (DONE) Basic data obtetion and calculations
+## Roadmap
 
-The main check here is the table 2 of the article. We expect equal results to check that we got correct results and used the correct dates.
+### 1. Data and descriptive statistics (Table 2, Figure 5 sample part)
+- [x] Obtain S&P 500 returns
+- [x] Split in-sample / out-of-sample
+- [x] Sample moments (mean, median, max, min, variance, skewness, kurtosis)
+- [x] Jarque-Bera test
+- [ ] Skewness / kurtosis p-values (Premaratne-Bera correction)
+- [x] ACF of y^2 and CCF of (y_t, y_{t+tau}^2), lags 1-20
 
-### 1. Obtain S&P 500 returns
+### 2. Model and simulator
+- [ ] Standardized GED(nu): density, sampler, E|eps|
+- [ ] Asymmetry function f(eps; theta) (TGA-SV)
+- [ ] TGA-SV simulator
+- [ ] Nested models: E-SV, A-ARSV, ARSV
 
-### 2. Basic calculations
+### 3. Theoretical moments
+- [ ] P(a, phi) infinite products
+- [ ] Variance and kurtosis, ACF and CCF (plug-in)
+- [ ] Validate against long simulated series
 
-- **Objective:** Split the data into in-sample and out-of-sample periods. Use the in-sample period to estimate model parameters and the out-of-sample period only to evaluate forecasts, without reestimating parameters. Compute the mean, median, max and min, variance, skewness and kurtosis for the in-sample, out-of-sample and for the full sample periods.
+### 4. ABC filter
+- [ ] State-observation sampling, kernel and bandwidth
+- [ ] Continuous resampling (Malik-Pitt), common random numbers
+- [ ] Figure 4 (standard vs continuous log-likelihood)
 
-### 3. Jarque--Bera test and skewness/kurtosis p-values
+### 5. Estimation and reproduction
+- [ ] ML optimizer
+- [ ] Table 1 (Monte Carlo)
+- [ ] Table 3 (S&P 500, 8 models)
+- [ ] Figure 5(b) with plug-in curves
 
-### 4. Autocorrelations of squared returns and cross-correlations between returns and future squared returns
+### 6. Out-of-sample forecasting
+- [ ] One-step-ahead VaR (1%, 5%)
+- [ ] VaR evaluation: DQ test, PQL, SPA (Table 4)
+- [ ] Squared-return quantiles and Kupiec (Table 5)
 
-### 5. ACF of squared returns and CCF of returns with future squared returns
+### 7. Comparison with alternative methods
+- [ ] Bootstrap particle filter + ML
+- [ ] PMMH
+- [ ] Comparative experiments (variability, cost, bias/RMSE)
 
--------------------------------
-
-## Model and Simulator
-
--------------------------------
-
-## Theorical Moments
-
--------------------------------
-
-## ABC Filter (basic central concept of the paper)
-
--------------------------------
-
-## Estimation and Reproduction of Results (main basic goal)
-
--------------------------------
-
-## Out-of-Sample Forecasting
-
-### . One-step-ahead VaR at the 1% and 5%
-
-### . Evaluate VaR forecasts
-
--------------------------------
-
-## Comparison with Alternative Methods
-
-### . Bootstrap particle filter with maximum likelihood (core objective I think)
-
-### . Particle marginal Metropolis--Hastings
-
-### . Comparative experiments
+### 8. Deliverables (deadline: 10 January)
+- [ ] Notebook, slides, clean repository, viva preparation## . Comparative experiments
