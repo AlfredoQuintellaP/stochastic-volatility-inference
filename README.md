@@ -1,35 +1,58 @@
 # ABC-filter ML for asymmetric SV models (SP500)
 Reproduction of Mao, Czellar, Ruiz & Veiga (2016) + comparison with other estimation methods.
 
+The main objective of the paper is to propose a model to the return volatility and a method to estimate their parameters. As the paper does, we are going to reproduce some results using the S&P 500 results.
+
 -------------------------------
 
-## Basic structure
+## The problem, the method and the whys
+
+The model assumes that volatility exists, but no one sees it. Volatility is like a measure of how nervous the market is: how much the prices fluctuate. What we get as data is just the return, a single number each day. A given return doesn't necessarily say much about the volatility, a high return, for example, can come from a high volatility or a rare draw with low volatility.
+In SV models the volatility is a hidden variable that runs by itself and has its own noise. We can only infer it by the returns, just like we can only see the mood of someone by their actions. This is the main difference between SV and models like GARCH, where the volatility is exaclty determined by past returns.
+
+We want the model to capture three main things (as observed in the S&P500 returns):
+- Volatile days tend to be followed by volatile days (volatility persistence or clustering).
+- Extreme price movements occur more frequently than expected under a normal distribution (fat tails).
+- Price drops tend to be followed by higher volatility than price increases of the same magnitude (the leverage effect).
+A model in which volatility is hidden, persistent over time and reacts to the previous day's return can reproduce these three facts. The price of this flexibility is that, since volatility is never observed, estimating the model is hard.
+
+-------------------------------
+
+## Basic structure of the project
 
 ```
 .
 ├── README.md
 ├── requirements.txt
-├── data/
-│   └── sp500.csv             # daily S&P 500 adjusted close and returns
-├── src/
-│   ├── __init__.py
-│   └── download_data.py      # data acquisition (Yahoo Finance)
-├── experiments/
-│   └── table2.py     # Table 2 and Figure 5 (sample part)
-├── results/
-│   └── table2_reproduced.csv
+├── data
+│   └── sp500.csv
+├── experiments
+│   ├── descriptive_statistics.py
+│   └── theorical_properties.py
+├── results
+│   ├── images
+│   │   ├── figure1_rho2_rho21_vs_alpha_gamma1.png
+│   │   ├── figure2_theoretical_acf_ccf_by_nu.png
+│   │   ├── figure3_volatility_response_surfaces.png
+│   │   ├── figure5a_sp500_daily_returns.png
+│   │   ├── figure5b_sample_acf_ccf_in_sample.png
+│   │   └── figure5b_sample_vs_plugin_acf_ccf.png
+│   └── tables
+│       ├── figure5b_sample_acf_ccf_in_sample.csv
+│       ├── table2_reproduced.csv
+│       └── table2_sample_moments_sp500.csv
+└── src
+    ├── data_utils.py
+    ├── download_data.py
+    ├── __init__.py
+    ├── stats_utils.py
+    └── theory.py
+
 ```
 
-The project is organized in six folders:
+-------------------------------
 
-- `data/`: datasets, normally saved as `.csv`.
-- `src/`: reusable code (data acquisition now; the model, filters and estimators later, e.g. `ged.py`, `model.py`, `abc_filter.py`).
-- `experiments/`: one script per table or figure reproduced from the paper, named after what it reproduces.
-- `results/`: outputs of the experiments (tables, figures, saved arrays).
-
-### Data
-
-S&P 500 index (`^GSPC`) adjusted close from Yahoo Finance, from 2 January 1996 to 18 September 2015. Returns are computed as y_t = 100 · Δlog(P_t). The in-sample period ends on 30 December 2005 and the out-of-sample period starts on 3 January 2006. Yahoo occasionally revises historical data, so small differences with respect to the paper are possible.
+# Reproducing the results
 
 -------------------------------
 
