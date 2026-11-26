@@ -51,5 +51,45 @@ A model in which volatility is hidden, persistent over time and reacts to the pr
 
 -------------------------------
 
-# Reproducing the results
+# Reproducing the Results
 
+## Statistical Properties of GA-SV Models
+
+### The Basics and what makes GA-SV different.
+ 
+
+A classical Stochastic Volatility (SV) model assumes that financial returns have a time-varying, unobservable variance. For example, the observed returns can be modeled as:
+
+$$
+y_t = \exp\left(\frac{h_t}{2}\right)\epsilon_t
+$$
+
+where:
+
+- $y_t$: observed financial return.
+- $h_t$: latent log-volatility.
+- $\epsilon_t \sim \mathcal{N}(0,1)$: observation noise.
+
+The latent log-volatility evolves according to an autoregressive process:
+
+$$
+h_t = \mu + \phi(h_{t-1} - \mu) + \sigma_\eta \eta_t
+$$
+
+where $\eta_t \sim \mathcal{N}(0,1)$ is the innovation process.
+
+This means volatility tends to persist over time: periods of high volatility tend to be followed by high volatility, while quiet periods tend to remain quiet.
+
+The key difference of the GA-SV is the additional function $f$, which introduces a dependence between past returns and future volatility:
+
+$$
+h_t = \mi + \phi(h_{t-1} - \mi) + f(\epsilon_{t-1};\theta) + \eta_{t-1}.
+$$
+
+Here:
+
+- $phi$ controls volatility persistence.
+- $f(\epsilon_{t-1};\theta)$ captures the impact of past returns on current volatility.
+- $\eta_t$ represents additional Gaussian noise.
+
+This allows the model to capture the leverage effect: negative returns tend to increase future volatility more than positive returns of the same magnitude.
