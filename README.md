@@ -135,6 +135,8 @@ Setting some of these parameters to zero gives well-known models, all nested in 
 | ARSV | $\alpha=\gamma_1=\gamma_2=0$ | symmetric SV, no leverage ($f=0$) |
 | RT-SV | $\gamma_1=\gamma_2=0$ | only the threshold: constant shift when the shock is negative |
 
+$\text{TGA-SV} \supset \text{E-SV} \supset \text{A-ARSV} \supset \text{ARSV}$, and RT-SV is a different branch inside the TGA-SV.
+
 TGA-SV ⊃ E-SV ⊃ A-ARSV ⊃ ARSV, and RT-SV is a different branch inside the TGA-SV.
 
 The shock $\epsilon_t$ can be Gaussian (suffix **-N**) or follow a standardized GED($\nu$) (suffix **-G**), which gives heavier tails when $\nu<2$. The Gaussian is the case $\nu=2$, so every "-N" model is nested in its "-G" version. In the empirical application this gives the 8 models of Table 3, and the nesting allows likelihood-ratio tests against the TGA-SV-G.
