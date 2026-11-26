@@ -144,6 +144,29 @@ The shock $\epsilon_t$ can be Gaussian (suffix **-N**) or follow a standardized 
 
 ![Figure 2](results/images/figure2_theoretical_acf_ccf_by_nu.png)
 
-*Figure 2. Theoretical ACF of squared returns (top) and CCF between returns and future squared returns (bottom) for each nested model, for different values of $\nu$.*
+*Figure 2. Theoretical ACF of squared returns (top) and CCF between returns and future squared returns (bottom) for TGA-SV, A-ARSV, E-SV and RT-SV, for different GED parameters $\nu$ ($\phi=0.98$, $\sigma_\eta^2=0.05$).*
 
+Reading the figure:
+- **Effect of $\nu$.** Within each panel, heavier tails (smaller $\nu$) give smaller autocorrelations of squared returns, but have almost no effect on the cross-correlations.
+- **Effect of $f$.** Adding $\gamma_2$ (A-ARSV $\to$ E-SV) increases the autocorrelations of squares but leaves the cross-correlations almost unchanged, since $|\epsilon|$ is symmetric and does not depend on the sign of the return. Adding $\alpha$ (E-SV $\to$ TGA-SV) barely changes the autocorrelations but makes the cross-correlations more negative. The RT-SV, with only the threshold, has the weakest cross-correlations.
+- **Identification.** The E-SV with $\nu=2$ and the A-ARSV with $\nu=2.5$ have almost the same ACF and CCF, but different kurtosis. When $\nu$ is free, the correlations alone cannot separate $\gamma_2$ and $\sigma_\eta^2$; the distribution of the returns also has to be used.
 
+#### How past shocks move tomorrow's volatility
+
+To see how the choice of $f$ matters for the dynamics, the paper plots the *volatility response surface*
+
+$$
+V_t = \exp\left((1-\phi)\mu\right)\sigma_y^{2\phi}\,\exp\left(f(\epsilon_{t-1};\theta) + \eta_{t-1}\right).
+$$
+
+It is obtained by taking the exponential of the log-volatility equation and evaluating the lagged volatility at its average level (the marginal variance of the returns, $\sigma_y^2$). So $V_t$ shows how the variance today changes with the two shocks of yesterday: the return shock $\epsilon_{t-1}$ and the volatility shock $\eta_{t-1}$. We set $\phi=0.98$, $\sigma_\eta^2=0.05$ and $\exp((1-\phi)\mu)\sigma_y^{2\phi}=1$. The shape of the surface does not depend on the distribution of $\epsilon_t$ (except through the constant $E|\epsilon_t|$), since it only depends on $f$ and $\eta_{t-1}$.
+
+![Figure 3](results/images/figure3_volatility_response_surfaces.png)
+
+*Figure 3. Volatility response $V_t$ as a function of $(\epsilon_{t-1},\eta_{t-1})$ for TGA-SV with $(\alpha,\gamma_1,\gamma_2)=(0.07,-0.08,0.1)$ (top), A-ARSV with $(0,-0.08,0)$ (middle) and E-SV with $(0,-0.08,0.1)$ (bottom).*
+
+What we see:
+- **TGA-SV (top):** the surface *jumps* at $\epsilon_{t-1}=0$, because of the indicator in $f$. The variance is a factor $e^{\alpha}\approx 1.07$ higher just below zero than just above it.
+- **A-ARSV (middle):** the surface is smooth, since $f=\gamma_1\epsilon_{t-1}$ is linear in the shock: a negative shock raises $V_t$ and a positive one lowers it, with no kink.
+- **E-SV (bottom):** there is no jump, but a kink at $\epsilon_{t-1}=0$ because of $|\epsilon_{t-1}|$. With $\gamma_1=-0.08$ and $\gamma_2=0.1$ the log-response is steep for negative shocks (slope $-0.18$) and almost flat for positive ones (slope $0.02$).
+- In all panels the effect of $\epsilon_{t-1}$ is larger when $\eta_{t-1}$ is positive. This is because $V_t = \exp(f)\exp(\eta)$: the shocks multiply each other, so the same change in $f$ is a larger change in $V_t$ when volatility is already high.
